@@ -2,6 +2,7 @@ import openai
 import streamlit as st
 import requests
 import json
+import chardet  # Import chardet for encoding detection
 
 # Greife auf den API-Schlüssel aus der Umgebungsvariable 
 api_key = st.secrets['OPENAI_API']
@@ -14,7 +15,6 @@ else:
 
 # URL of the trainingsdaten.json file in your GitHub repository
 url = "https://raw.githubusercontent.com/Bernhard-Keller123/AventraGPT_MK/main/trainingdata.json"
-
 
 # Funktion zum Laden der Trainingsdaten von GitHub
 def lade_trainingsdaten_aus_github(url):
@@ -72,8 +72,11 @@ if st.button("Trainingsdaten laden"):
             encoding = result['encoding']
             training_data = raw_data.decode(encoding)
 
+            # Update the training data and save it
             trainingsdaten.append(training_data)
-            speichere_trainingsdaten_in_datei(trainingsdaten, st.session_state['trainingsdaten_pfad'])
+            with open('trainingdata.json', 'w') as f:
+                json.dump({"message": "START", "data": trainingsdaten}, f, ensure_ascii=False, indent=4)
+
             chat_history.append({"role": "system", "content": training_data})
             st.success("Trainingsdaten erfolgreich geladen.")
         except Exception as e:
