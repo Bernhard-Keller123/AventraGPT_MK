@@ -1,3 +1,4 @@
-[
-    "START\r\n\r\n Diese App wurde mit folgenden Daten trainiert: 
-]
+{
+    "message": "The repo AventraGPT_MK has been trained with the following data:",
+    "data": []
+}
