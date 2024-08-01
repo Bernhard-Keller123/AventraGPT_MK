@@ -48,7 +48,7 @@ def generiere_antwort(prompt):
         return str(e)
 
 # Streamlit App
-st.title("AventraGPT_Plays")
+st.title("AventraGPT_MK")
 
 # Eingabefeld für den Prompt
 prompt = st.text_input("Du: ")
