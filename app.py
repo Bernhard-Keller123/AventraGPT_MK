@@ -2,9 +2,8 @@ import openai
 import streamlit as st
 import requests
 import json
-import chardet
 
-# Greife auf den API-Schlüssel aus der Umgebungsvariable zu
+# Greife auf den API-Schlüssel aus der Umgebungsvariable 
 api_key = st.secrets['OPENAI_API']
 
 if not api_key:
@@ -16,27 +15,14 @@ else:
 # URL of the trainingsdaten.json file in your GitHub repository
 url = "https://raw.githubusercontent.com/Bernhard-Keller123/AventraGPT_MK/main/trainingdata.json"
 
+
 # Funktion zum Laden der Trainingsdaten von GitHub
 def lade_trainingsdaten_aus_github(url):
     response = requests.get(url)
     if response.status_code == 200:
-        content = response.content.decode('utf-8')
-        if content.strip():  # Check if content is not empty
-            try:
-                json_data = json.loads(content)
-                # Ensure the JSON data has the correct structure
-                if "data" in json_data:
-                    return json_data["data"]
-                else:
-                    st.error("JSON-Daten haben nicht die erwartete Struktur.")
-                    return []
-            except json.JSONDecodeError:
-                st.error("Fehler beim Dekodieren der JSON-Daten.")
-                return []
-        else:
-            return []  # Return empty list if JSON file is empty
+        return json.loads(response.content)
     else:
-        st.error("Fehler beim Laden der Trainingsdaten von GitHub.")
+        st.error("Fehler beim Laden der Trainingsdaten von GitHub")
         return []
 
 trainingsdaten = lade_trainingsdaten_aus_github(url)
@@ -62,7 +48,7 @@ def generiere_antwort(prompt):
         return str(e)
 
 # Streamlit App
-st.title("AventraGPT_MK")
+st.title("AventraGPT_Plays")
 
 # Eingabefeld für den Prompt
 prompt = st.text_input("Du: ")
@@ -86,24 +72,15 @@ if st.button("Trainingsdaten laden"):
             encoding = result['encoding']
             training_data = raw_data.decode(encoding)
 
-            # Append new training data to existing data
-            if training_data.strip():
-                existing_data = lade_trainingsdaten_aus_github(url)
-                existing_data.append(training_data)
-                # Update JSON structure with new data
-                updated_data = {
-                    "message": "The repo AventraGPT_MK has been trained with the following data:",
-                    "data": existing_data
-                }
-                with open('trainingdata.json', 'w') as f:
-                    json.dump(updated_data, f, ensure_ascii=False, indent=4)
-
+            trainingsdaten.append(training_data)
+            speichere_trainingsdaten_in_datei(trainingsdaten, st.session_state['trainingsdaten_pfad'])
+            chat_history.append({"role": "system", "content": training_data})
             st.success("Trainingsdaten erfolgreich geladen.")
         except Exception as e:
             st.error(f"Fehler beim Laden der Datei: {e}")
 
 # Anzeige des Gesprächsverlaufs
-st.subheader("Trainingsdaten und Gesprächsverlauf")
+st.subheader("Trainingsdaten und Gesprächsverl")
 for eintrag in chat_history:
     if eintrag['role'] == 'user':
         st.write(f"Du: {eintrag['content']}")
