@@ -2,7 +2,7 @@ import openai
 import streamlit as st
 import requests
 import json
-import chardet  # Import chardet for encoding detection
+import chardet  # Make sure chardet is imported
 
 # Greife auf den API-Schlüssel aus der Umgebungsvariable 
 api_key = st.secrets['OPENAI_API']
@@ -83,7 +83,7 @@ if st.button("Trainingsdaten laden"):
             st.error(f"Fehler beim Laden der Datei: {e}")
 
 # Anzeige des Gesprächsverlaufs
-st.subheader("Trainingsdaten und Gesprächsverl")
+st.subheader("Trainingsdaten und Gesprächsverlfs")
 for eintrag in chat_history:
     if eintrag['role'] == 'user':
         st.write(f"Du: {eintrag['content']}")
