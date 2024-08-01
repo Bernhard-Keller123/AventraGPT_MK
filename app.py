@@ -2,9 +2,8 @@ import openai
 import streamlit as st
 import requests
 import json
-import chardet
 
-# Greife auf den API-Schlüssel aus der Umgebungsvariable zu
+# Greife auf den API-Schlüssel aus der Umgebungsvariable 
 api_key = st.secrets['OPENAI_API']
 
 if not api_key:
@@ -16,19 +15,12 @@ else:
 # URL of the trainingsdaten.json file in your GitHub repository
 url = "https://raw.githubusercontent.com/Bernhard-Keller123/AventraGPT_MK/main/trainingdata.json"
 
+
 # Funktion zum Laden der Trainingsdaten von GitHub
 def lade_trainingsdaten_aus_github(url):
     response = requests.get(url)
     if response.status_code == 200:
-        content = response.content.decode('utf-8')
-        if content.strip():  # Check if content is not empty
-            try:
-                return json.loads(content)
-            except json.JSONDecodeError:
-                st.error("Fehler beim Dekodieren der JSON-Daten")
-                return []
-        else:
-            return []  # Return empty list if JSON file is empty
+        return json.loads(response.content)
     else:
         st.error("Fehler beim Laden der Trainingsdaten von GitHub")
         return []
@@ -56,7 +48,7 @@ def generiere_antwort(prompt):
         return str(e)
 
 # Streamlit App
-st.title("AventraGPT_MK")
+st.title("AventraGPT_Plays")
 
 # Eingabefeld für den Prompt
 prompt = st.text_input("Du: ")
@@ -81,12 +73,14 @@ if st.button("Trainingsdaten laden"):
             training_data = raw_data.decode(encoding)
 
             trainingsdaten.append(training_data)
+            speichere_trainingsdaten_in_datei(trainingsdaten, st.session_state['trainingsdaten_pfad'])
+            chat_history.append({"role": "system", "content": training_data})
             st.success("Trainingsdaten erfolgreich geladen.")
         except Exception as e:
             st.error(f"Fehler beim Laden der Datei: {e}")
 
 # Anzeige des Gesprächsverlaufs
-st.subheader("Trainingsdaten und Gesprächsverlaufs")
+st.subheader("Trainingsdaten und Gesprächsverl")
 for eintrag in chat_history:
     if eintrag['role'] == 'user':
         st.write(f"Du: {eintrag['content']}")
