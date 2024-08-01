@@ -4,7 +4,7 @@ import requests
 import json
 import chardet
 
-# Greife auf den API-Schlüssel aus der Umgebungsvariable zu
+# Greife auf den API-Schlüssel aus der Umgebungsvariable z
 api_key = st.secrets['OPENAI_API']
 
 if not api_key:
