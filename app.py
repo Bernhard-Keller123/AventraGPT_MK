@@ -13,7 +13,7 @@ else:
     st.write(f" ")
 
 # URL of the trainingsdaten.json file in your GitHub repository
-url = "https://raw.githubusercontent.com/Bernhard-Keller123/AventraGPT_MK/main/trainingdata.json"
+url = "https://raw.githubusercontent.com/Bernhard-Keller123/AventraGPT/main/trainingdata.json"
 
 
 # Funktion zum Laden der Trainingsdaten von GitHub
